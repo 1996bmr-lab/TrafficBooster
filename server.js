@@ -38,6 +38,20 @@ app.get("/health", (_req, res) => res.json({ ok: true, uptime: process.uptime() 
 
 app.use((_req, res) => res.status(404).json({ ok: false, error: "Not found" }));
 
+// JSON error handler. Without this, malformed request bodies and any
+// uncaught errors fall through to Express's default handler, which returns
+// an HTML page — causing "Unexpected end of JSON input" in the client.
+// Keep the 4-arg signature so Express treats this as an error handler.
+// eslint-disable-next-line no-unused-vars
+app.use((err, _req, res, _next) => {
+  const isBadJson = err.type === "entity.parse.failed" || err instanceof SyntaxError;
+  const status = isBadJson ? 400 : err.status || 500;
+  res.status(status).json({
+    ok: false,
+    error: isBadJson ? "Request body is not valid JSON." : err.message || "Internal server error.",
+  });
+});
+
 // Only listen when run directly (keeps the app importable in tests).
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   app.listen(PORT, () => {

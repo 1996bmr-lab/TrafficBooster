@@ -4,8 +4,22 @@
 const panels = [...document.querySelectorAll(".panel")];
 const nav = document.getElementById("toolNav");
 
+// Read a response as JSON, but tolerate empty or non-JSON bodies so the
+// UI shows a clear message instead of "Unexpected end of JSON input".
+async function parseJson(r) {
+  const text = await r.text();
+  if (!text) return { ok: false, error: `Empty response (HTTP ${r.status}).` };
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { ok: false, error: `Server returned a non-JSON response (HTTP ${r.status}).` };
+  }
+}
+
 // Build sidebar from the API tool catalog.
-const res = await fetch("/api/tools").then((r) => r.json()).catch(() => null);
+const res = await fetch("/api/tools")
+  .then((r) => parseJson(r))
+  .catch(() => null);
 const tools = res?.data || panels.map((p) => ({ id: p.dataset.tool, name: p.querySelector("h2").textContent, desc: "" }));
 
 for (const tool of tools) {
@@ -42,8 +56,8 @@ for (const form of document.querySelectorAll("form[data-endpoint]")) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const json = await r.json();
-      if (!json.ok) throw new Error(json.error || "Request failed");
+      const json = await parseJson(r);
+      if (!json.ok) throw new Error(json.error || `Request failed (HTTP ${r.status})`);
       render(panel.dataset.tool, result, json.data);
     } catch (err) {
       result.innerHTML = `<div class="error-box">⚠️ ${escapeHtml(err.message)}</div>`;
