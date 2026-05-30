@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TrafficBooster — SEO &amp; Traffic Optimization Toolkit</title>
+    <meta
+      name="description"
+      content="A toolkit of features to audit and boost your website's search engine ranking and organic traffic."
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">🚀</span>
+        <div>
+          <h1>TrafficBooster</h1>
+          <p class="tagline">Audit &amp; optimize your site for search engines and organic traffic</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <nav class="sidebar" id="toolNav" aria-label="Tools"></nav>
+
+      <section class="workspace">
+        <!-- SEO Audit -->
+        <article class="panel" data-tool="audit">
+          <h2>SEO Audit</h2>
+          <p class="hint">Crawl a page and grade its on-page SEO, with a prioritized fix list.</p>
+          <form data-endpoint="/api/audit">
+            <label>Page URL<input name="url" type="text" placeholder="example.com" required /></label>
+            <button type="submit">Run audit</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+
+        <!-- Keyword Analyzer -->
+        <article class="panel" data-tool="keywords" hidden>
+          <h2>Keyword Analyzer</h2>
+          <p class="hint">See keyword density and the phrases a page emphasizes. Compare against target keywords.</p>
+          <form data-endpoint="/api/keywords">
+            <label>Page URL <small>(or paste text below)</small><input name="url" type="text" placeholder="example.com/blog/post" /></label>
+            <label>Text<textarea name="text" rows="4" placeholder="Paste content to analyze instead of a URL"></textarea></label>
+            <label>Target keywords <small>(comma separated)</small><input name="targets" type="text" placeholder="best running shoes, trail shoes" /></label>
+            <button type="submit">Analyze keywords</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+
+        <!-- Meta Generator -->
+        <article class="panel" data-tool="meta" hidden>
+          <h2>Meta Tag Generator</h2>
+          <p class="hint">Produce optimized &lt;head&gt; tags including Open Graph and Twitter cards.</p>
+          <form data-endpoint="/api/meta">
+            <label>Title<input name="title" type="text" required placeholder="Your page title" /></label>
+            <label>Description<textarea name="description" rows="3" placeholder="Compelling 70–160 char summary"></textarea></label>
+            <label>Canonical URL<input name="url" type="text" placeholder="https://example.com/page" /></label>
+            <label>Social image URL<input name="image" type="text" placeholder="https://example.com/og.jpg" /></label>
+            <label>Site name<input name="siteName" type="text" placeholder="My Site" /></label>
+            <label>Twitter handle<input name="twitterHandle" type="text" placeholder="@yoursite" /></label>
+            <label>Keywords<input name="keywords" type="text" placeholder="comma, separated" /></label>
+            <button type="submit">Generate tags</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+
+        <!-- Sitemap -->
+        <article class="panel" data-tool="sitemap" hidden>
+          <h2>Sitemap Generator</h2>
+          <p class="hint">Crawl same-domain links and build an XML sitemap to submit to search engines.</p>
+          <form data-endpoint="/api/sitemap">
+            <label>Start URL<input name="url" type="text" required placeholder="example.com" /></label>
+            <label>Max pages<input name="maxPages" type="number" value="25" min="1" max="100" /></label>
+            <button type="submit">Generate sitemap</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+
+        <!-- Robots -->
+        <article class="panel" data-tool="robots" hidden>
+          <h2>Robots.txt Generator</h2>
+          <p class="hint">Build a robots.txt to guide crawlers.</p>
+          <form data-endpoint="/api/robots">
+            <label class="checkbox"><input name="allowAll" type="checkbox" checked /> Allow all crawlers by default</label>
+            <label>Disallow paths <small>(one per line)</small><textarea name="disallowPaths" rows="3" placeholder="/admin&#10;/cart"></textarea></label>
+            <label>Sitemap URL<input name="sitemapUrl" type="text" placeholder="https://example.com/sitemap.xml" /></label>
+            <label>Crawl delay (seconds)<input name="crawlDelay" type="number" min="0" placeholder="0" /></label>
+            <button type="submit">Generate robots.txt</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+
+        <!-- Links -->
+        <article class="panel" data-tool="links" hidden>
+          <h2>Broken Link Checker</h2>
+          <p class="hint">Scan a page's links and flag the broken ones that hurt UX and crawl budget.</p>
+          <form data-endpoint="/api/links">
+            <label>Page URL<input name="url" type="text" required placeholder="example.com" /></label>
+            <label>Max links<input name="maxLinks" type="number" value="40" min="1" max="100" /></label>
+            <button type="submit">Check links</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+
+        <!-- Readability -->
+        <article class="panel" data-tool="readability" hidden>
+          <h2>Readability Analyzer</h2>
+          <p class="hint">Score content with Flesch Reading Ease &amp; grade level.</p>
+          <form data-endpoint="/api/readability">
+            <label>Page URL <small>(or paste text)</small><input name="url" type="text" placeholder="example.com/post" /></label>
+            <label>Text<textarea name="text" rows="5" placeholder="Paste content to analyze"></textarea></label>
+            <button type="submit">Analyze readability</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+
+        <!-- Schema -->
+        <article class="panel" data-tool="schema" hidden>
+          <h2>Schema Generator</h2>
+          <p class="hint">Generate JSON-LD structured data for rich search results.</p>
+          <form data-endpoint="/api/schema">
+            <label>Type
+              <select name="kind">
+                <option value="organization">Organization</option>
+                <option value="localbusiness">Local Business</option>
+                <option value="article">Article</option>
+                <option value="product">Product</option>
+                <option value="website">Website</option>
+              </select>
+            </label>
+            <label>Name / Headline<input name="name" type="text" placeholder="Acme Inc." /></label>
+            <label>URL<input name="url" type="text" placeholder="https://example.com" /></label>
+            <label>Description<textarea name="description" rows="2"></textarea></label>
+            <label>Image / Logo URL<input name="image" type="text" /><input name="logo" type="hidden" /></label>
+            <button type="submit">Generate schema</button>
+          </form>
+          <div class="result" hidden></div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>TrafficBooster · white-hat SEO tooling · respects robots.txt and only analyzes public URLs.</p>
+    </footer>
+
+    <script src="/js/app.js" type="module"></script>
+  </body>
+</html>
