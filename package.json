@@ -1,0 +1,27 @@
+{
+  "name": "traffic-booster",
+  "version": "1.0.0",
+  "description": "A web application toolkit of features to analyze and boost a website's search engine ranking and organic traffic.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "seo",
+    "traffic",
+    "search-engine",
+    "audit",
+    "keywords",
+    "sitemap",
+    "meta-tags"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "express": "^4.21.2"
+  }
+}
