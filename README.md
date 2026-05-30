@@ -64,15 +64,41 @@ curl -s -X POST http://localhost:3000/api/audit \
   -d '{"url":"https://example.com"}' | jq
 ```
 
+## Deploying to Cloudflare Workers
+
+The app also runs as a Cloudflare Worker (static dashboard + `/api` routes),
+configured in `wrangler.toml`.
+
+```bash
+npm install
+npm run deploy        # npx wrangler deploy
+npm run cf:dev        # run the Worker locally (wrangler dev)
+```
+
+**Cloudflare "Build" settings** for the connected Git repo:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm ci` (so `wrangler` can bundle dependencies) |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | `/` |
+| Production branch | your default branch (e.g. `main`) |
+
+The Worker serves `public/` via the static-assets binding and handles
+`/api/*` with the same services as the Node server, so behavior is identical.
+
 ## Architecture
 
 ```
-server.js              Express app, static hosting, rate limiting
+server.js              Express app for local Node dev (npm start)
 src/
-  routes/api.js        Maps endpoints → services
-  services/            One module per tool (pure where possible)
+  worker.js            Cloudflare Worker entry (fetch handler + ASSETS)
+  dispatch.js          Shared tool dispatch used by server.js AND worker.js
+  routes/api.js        Express routes -> dispatch
+  services/            One module per tool (framework-agnostic)
   utils/fetcher.js     Safe fetch with timeouts + SSRF guard
 public/                Dashboard UI (vanilla HTML/CSS/JS)
+wrangler.toml          Cloudflare Worker + static-assets config
 test/                  node:test unit tests
 ```
 

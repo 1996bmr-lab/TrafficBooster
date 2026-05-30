@@ -89,7 +89,7 @@ export async function fetchPage(target, options = {}) {
       elapsedMs,
       contentType,
       headers: res.headers,
-      sizeBytes: Buffer.byteLength(body || "", "utf8"),
+      sizeBytes: new TextEncoder().encode(body || "").length,
       body,
     };
   } catch (err) {

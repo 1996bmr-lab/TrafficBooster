@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "cf:dev": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
   "keywords": [
     "seo",
@@ -23,5 +25,8 @@
   "dependencies": {
     "cheerio": "^1.0.0",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.1"
   }
 }

@@ -1,0 +1,19 @@
+# Cloudflare Worker configuration for TrafficBooster.
+# Deployed by the Cloudflare build pipeline via `npx wrangler deploy`.
+
+name = "traffic-booster"
+main = "src/worker.js"
+compatibility_date = "2025-01-15"
+# nodejs_compat lets bundled deps (e.g. cheerio) use Node built-ins.
+compatibility_flags = ["nodejs_compat"]
+
+# Serve the dashboard (public/) as static assets, and expose the binding
+# to the Worker so it can fall back to assets for non-API routes.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+# Single-page-style fallback isn't needed; unknown asset paths 404 normally.
+not_found_handling = "none"
+
+[observability]
+enabled = true

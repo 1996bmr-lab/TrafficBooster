@@ -5,3 +5,5 @@ npm-debug.log*
 dist/
 coverage/
 *.log
+.wrangler/
+.dev.vars
