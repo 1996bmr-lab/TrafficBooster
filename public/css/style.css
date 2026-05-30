@@ -327,6 +327,19 @@ table.tbl th {
   padding: 12px 14px;
   font-size: 14px;
 }
+.banner {
+  background: rgba(255, 200, 87, 0.14);
+  border-bottom: 1px solid var(--warn);
+  color: #ffe6a8;
+  padding: 12px 28px;
+  font-size: 14px;
+}
+.banner code {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
 .spinner {
   color: var(--muted);
   font-size: 14px;

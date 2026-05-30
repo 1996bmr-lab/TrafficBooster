@@ -16,10 +16,25 @@ async function parseJson(r) {
   }
 }
 
+// Show a prominent, actionable banner when the backend API isn't reachable.
+function showBackendBanner() {
+  if (document.getElementById("backendBanner")) return;
+  const div = document.createElement("div");
+  div.id = "backendBanner";
+  div.className = "banner";
+  div.innerHTML =
+    "⚠️ <strong>Backend not reachable.</strong> The tools need the Node server. " +
+    "Run <code>npm install &amp;&amp; npm start</code> and open " +
+    "<code>http://localhost:3000</code> — opening the HTML file directly or via a " +
+    "static-only server won't serve the <code>/api</code> endpoints.";
+  document.body.prepend(div);
+}
+
 // Build sidebar from the API tool catalog.
 const res = await fetch("/api/tools")
   .then((r) => parseJson(r))
   .catch(() => null);
+if (!res?.ok) showBackendBanner();
 const tools = res?.data || panels.map((p) => ({ id: p.dataset.tool, name: p.querySelector("h2").textContent, desc: "" }));
 
 for (const tool of tools) {
@@ -57,9 +72,15 @@ for (const form of document.querySelectorAll("form[data-endpoint]")) {
         body: JSON.stringify(payload),
       });
       const json = await parseJson(r);
+      if (r.status === 404) {
+        showBackendBanner();
+        throw new Error("Backend not reachable — start it with `npm start` (see the banner above).");
+      }
       if (!json.ok) throw new Error(json.error || `Request failed (HTTP ${r.status})`);
       render(panel.dataset.tool, result, json.data);
     } catch (err) {
+      // A thrown TypeError from fetch usually means the server isn't running.
+      if (err instanceof TypeError) showBackendBanner();
       result.innerHTML = `<div class="error-box">⚠️ ${escapeHtml(err.message)}</div>`;
     } finally {
       btn.disabled = false;
