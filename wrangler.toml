@@ -1,7 +1,7 @@
 # Cloudflare Worker configuration for TrafficBooster.
 # Deployed by the Cloudflare build pipeline via `npx wrangler deploy`.
 
-name = "traffic-booster"
+name = "trafficbooster"
 main = "src/worker.js"
 compatibility_date = "2025-01-15"
 # nodejs_compat lets bundled deps (e.g. cheerio) use Node built-ins.
